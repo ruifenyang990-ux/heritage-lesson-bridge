@@ -2,7 +2,6 @@ import { useState, type FormEvent } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowDown, ArrowUpRight, Check, Clipboard, Feather, LoaderCircle, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
-import { blink } from '@/blink/client'
 
 const projects = ['羌绣', '藏羌剪纸', '博巴森根'] as const
 const requiredHeadings = ['教学任务', '教学目标', '教学重难点', '学情分析', '教学过程', '教学资源', '课后反思']
@@ -50,19 +49,38 @@ function Home() {
     setError('')
     setLesson('')
     try {
-      const { text } = await blink.ai.generateText({
-        messages: [
-          {
-            role: 'system',
-            content: '你是一位熟悉《义务教育艺术课程标准（2022年版）》的小学、初中、高中美术教研员，也尊重非物质文化遗产的社区语境。用准确、温和、可落地的中文为一线美术教师备课。围绕审美感知、艺术表现、创意实践、文化理解设计活动，不把非遗简化为装饰，不编造具体传承人、年代或地方史实。总字数约500字，按要求的小标题逐段输出，活动需明确教师与学生行为、时间、评价方式。',
-          },
-          {
-            role: 'user',
-            content: `请为${audience}美术课设计一份以「${heritage}」为核心的教案，备课主题为「${topic.trim()}」。教学内容约500字，需适龄、可操作，并体现义务教育艺术课程标准中的核心素养。必须严格按以下七个小标题输出，标题一字不差：\n${requiredHeadings.join('、')}。\n另在七部分之后增加独立小标题「课堂导入素材」，给出一条可直接讲述的非遗背景小故事或视觉特征观察提示（约80字）。不确定的具体史实请提醒教师向当地传承人或可靠资料核实。`,
-          },
-        ],
-        maxTokens: 1500,
+      const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            {
+              role: 'system',
+              content: '你是一位熟悉《义务教育艺术课程标准（2022年版）》的小学、初中、高中美术教研员，也尊重非物质文化遗产的社区语境。用准确、温和、可落地的中文为一线美术教师备课。围绕审美感知、艺术表现、创意实践、文化理解设计活动，不把非遗简化为装饰，不编造具体传承人、年代或地方史实。总字数约500字，按要求的小标题逐段输出，活动需明确教师与学生行为、时间、评价方式。',
+            },
+            {
+              role: 'user',
+              content: `请为${audience}美术课设计一份以「${heritage}」为核心的教案，备课主题为「${topic.trim()}」。教学内容约500字，需适龄、可操作，并体现义务教育艺术课程标准中的核心素养。必须严格按以下七个小标题输出，标题一字不差：\n${requiredHeadings.join('、')}。\n另在七部分之后增加独立小标题「课堂导入素材」，给出一条可直接讲述的非遗背景小故事或视觉特征观察提示（约80字）。不确定的具体史实请提醒教师向当地传承人或可靠资料核实。`,
+            },
+          ],
+          max_tokens: 1500,
+        }),
       })
+      if (!response.ok) {
+        const detail = response.status === 401
+          ? 'DeepSeek API 鉴权失败，请检查 .env.local 中的 VITE_DEEPSEEK_API_KEY 是否已填写并重启开发服务器。'
+          : `DeepSeek API 请求失败（HTTP ${response.status}），请稍后重试。`
+        throw new Error(detail)
+      }
+      const data = await response.json()
+      const text: string = data?.choices?.[0]?.message?.content ?? ''
+      if (!text.trim()) {
+        throw new Error('模型未返回教案内容，请稍后重试。')
+      }
       setLesson(text.trim())
       toast.success('教案已生成，可以继续编辑与使用。')
     } catch (cause) {
@@ -178,7 +196,7 @@ function Home() {
                 <div className="flex min-h-[450px] flex-col items-center justify-center text-center">
                   <span className="font-serif text-4xl text-primary">再试一次</span>
                   <p className="mt-4 max-w-md text-sm leading-7 text-muted-foreground">{error}</p>
-                  <p className="mt-3 max-w-md text-xs leading-6 text-muted-foreground">如果这是首次使用，请先批准匿名 AI 访问许可，再点击生成。</p>
+                  <p className="mt-3 max-w-md text-xs leading-6 text-muted-foreground">如果提示鉴权失败，请先在 .env.local 中填写 DeepSeek API Key，保存后重启开发服务器再生成。</p>
                 </div>
               ) : lesson ? (
                 <div className="animate-fade-in">
