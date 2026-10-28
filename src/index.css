@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE ONLY design-tokens file. This single file owns the whole app's visual
+   identity — colors, radius, fonts, shadows, light + dark. To re-theme the app
+   (e.g. "make it a Supabase theme"), edit the token VALUES in :root and .dark
+   below. Nothing else. No second config file, no component edits, no library
+   theme layer. Values are oklch(); the @theme inline block maps them to Tailwind
+   utilities (bg-primary, text-foreground, border-border, …) in this same file.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Design tokens — the ONLY place the app's visual identity is defined.
+   Re-theme the whole app by editing the values in :root (+ .dark). No other file. ── */
+:root {
+  --background: oklch(0.967 0.008 79);
+  --foreground: oklch(0.245 0.014 55);
+  --card: oklch(0.986 0.004 78);
+  --card-foreground: oklch(0.245 0.014 55);
+  --popover: oklch(0.986 0.004 78);
+  --popover-foreground: oklch(0.245 0.014 55);
+  --primary: oklch(0.48 0.104 30);
+  --primary-foreground: oklch(0.984 0.004 78);
+  --secondary: oklch(0.93 0.017 75);
+  --secondary-foreground: oklch(0.33 0.022 49);
+  --muted: oklch(0.936 0.008 78);
+  --muted-foreground: oklch(0.49 0.018 53);
+  --accent: oklch(0.83 0.055 71);
+  --accent-foreground: oklch(0.29 0.025 48);
+  --destructive: oklch(0.56 0.19 26);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.012 72);
+  --input: oklch(0.88 0.012 72);
+  --ring: oklch(0.56 0.09 35);
+  --chart-1: oklch(0.55 0.13 35);
+  --chart-2: oklch(0.64 0.07 145);
+  --chart-3: oklch(0.72 0.08 73);
+  --chart-4: oklch(0.56 0.07 245);
+  --chart-5: oklch(0.62 0.08 12);
+  --sidebar: oklch(0.95 0.01 78);
+  --sidebar-foreground: oklch(0.245 0.014 55);
+  --sidebar-primary: oklch(0.48 0.104 30);
+  --sidebar-primary-foreground: oklch(0.984 0.004 78);
+  --sidebar-accent: oklch(0.91 0.02 72);
+  --sidebar-accent-foreground: oklch(0.29 0.025 48);
+  --sidebar-border: oklch(0.88 0.012 72);
+  --sidebar-ring: oklch(0.56 0.09 35);
+
+  --radius: 0.5rem;
+  --font-sans: 'Noto Sans SC', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Noto Serif SC', 'Lora', ui-serif, Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --shadow-sm: 0 2px 8px oklch(0.25 0.02 55 / 0.06);
+  --shadow-md: 0 12px 32px oklch(0.25 0.02 55 / 0.09);
+  --shadow-lg: 0 24px 60px oklch(0.25 0.02 55 / 0.14);
+}
+
+.dark {
+  --background: oklch(0.205 0.012 49);
+  --foreground: oklch(0.93 0.009 77);
+  --card: oklch(0.25 0.014 49);
+  --card-foreground: oklch(0.93 0.009 77);
+  --popover: oklch(0.25 0.014 49);
+  --popover-foreground: oklch(0.93 0.009 77);
+  --primary: oklch(0.72 0.09 42);
+  --primary-foreground: oklch(0.21 0.014 49);
+  --secondary: oklch(0.31 0.016 50);
+  --secondary-foreground: oklch(0.86 0.01 76);
+  --muted: oklch(0.29 0.013 51);
+  --muted-foreground: oklch(0.71 0.014 70);
+  --accent: oklch(0.37 0.03 48);
+  --accent-foreground: oklch(0.92 0.01 76);
+  --destructive: oklch(0.63 0.18 26);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.37 0.016 51);
+  --input: oklch(0.37 0.016 51);
+  --ring: oklch(0.72 0.09 42);
+  --chart-1: oklch(0.72 0.1 42);
+  --chart-2: oklch(0.72 0.08 150);
+  --chart-3: oklch(0.8 0.08 73);
+  --chart-4: oklch(0.69 0.07 245);
+  --chart-5: oklch(0.7 0.08 12);
+  --sidebar: oklch(0.25 0.014 49);
+  --sidebar-foreground: oklch(0.93 0.009 77);
+  --sidebar-primary: oklch(0.72 0.09 42);
+  --sidebar-primary-foreground: oklch(0.21 0.014 49);
+  --sidebar-accent: oklch(0.33 0.018 51);
+  --sidebar-accent-foreground: oklch(0.9 0.01 76);
+  --sidebar-border: oklch(0.37 0.016 51);
+  --sidebar-ring: oklch(0.72 0.09 42);
+}
+
+/* ── Token → utility mapping (Tailwind v4). Same file as the values above. ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+
+  /* Full viewport chain so AppShell / Sidebar h-full + flex-1 work */
+  html { height: 100%; }
+  #root {
+    min-height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  body {
+    min-height: 100%;
+    min-height: 100dvh;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in { animation: fade-in 0.3s ease-in-out; }
+  .animate-bob { animation: bob 2s ease-in-out infinite; }
+  .parallax-scene {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .scene-qiang {
+    background-image: url('https://images.unsplash.com/photo-1748722445955-515c32a78b27?auto=format&fit=crop&w=2200&q=85');
+    background-position: center 48%;
+  }
+  .scene-paper {
+    background-image: url('https://images.unsplash.com/photo-1648396576833-76af18e399dd?auto=format&fit=crop&w=2200&q=85');
+    background-position: center 42%;
+  }
+  .scene-dance {
+    background-image: url('https://images.unsplash.com/photo-1667984866675-5daf6fcb8175?auto=format&fit=crop&w=2200&q=85');
+    background-position: center 44%;
+  }
+  .scene-shade {
+    background: linear-gradient(90deg, oklch(0.12 0.012 42 / 0.66), oklch(0.12 0.012 42 / 0.15)), linear-gradient(0deg, oklch(0.1 0.01 42 / 0.5), transparent 45%, oklch(0.1 0.01 42 / 0.28));
+  }
+  .hero-nav { background: linear-gradient(180deg, oklch(0.11 0.01 42 / 0.36), transparent); }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+}
+
+@media (max-width: 767px) {
+  .parallax-scene { background-attachment: scroll; }
+  .scene-paper { background-position: 58% center; }
+  .scene-dance { background-position: 53% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
